@@ -1,9 +1,10 @@
 const express = require('express');
 const { Equipment } = require('../models');
+const authenticateToken = require('../middlewares/authMiddleware'); // Asegúrate de que la ruta sea correcta
 const router = express.Router();
 
 // Crear un nuevo equipo
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const newEquipment = await Equipment.create(req.body);
     res.status(201).json(newEquipment);
@@ -13,7 +14,7 @@ router.post('/', async (req, res) => {
 });
 
 // Obtener todos los equipos
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const equipments = await Equipment.findAll();
     res.json(equipments);
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
 });
 
 // Actualizar un equipo
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const [updated] = await Equipment.update(req.body, { where: { id: req.params.id } });
     if (updated) {
@@ -38,7 +39,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Eliminar un equipo
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const deleted = await Equipment.destroy({ where: { id: req.params.id } });
     if (deleted) {

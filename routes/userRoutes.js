@@ -1,58 +1,68 @@
 const express = require('express');
 const { User, Role } = require('../models');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { authMiddleware } = require('../middleware/authMiddleware');
+
 const router = express.Router();
 
-// Crear un nuevo usuario
-router.post('/', async (req, res) => {
-  try {
-    const { username, email, password, role_id } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ username, email, password: hashedPassword, role_id });
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al crear el usuario' });
-  }
-});
-
-// Obtener todos los usuarios
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.findAll({ include: Role });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los usuarios' });
-  }
-});
-
-// Actualizar un usuario
-router.put('/:id', async (req, res) => {
-  try {
-    const { username, email, password, role_id } = req.body;
-    const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
-    const [updated] = await User.update({ username, email, password: hashedPassword, role_id }, { where: { id: req.params.id } });
-    if (updated) {
-      const updatedUser = await User.findByPk(req.params.id, { include: Role });
-      res.json(updatedUser);
-    } else {
-      res.status(404).json({ error: 'Usuario no encontrado' });
+// Ruta para registrar un nuevo usuario
+router.post('/register', async (req, res) => {
+    try {
+      const { username, email, password, role_id } = req.body;
+  
+      // Hashear la contraseña
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Crear el usuario
+      const user = await User.create({ username, email, password: hashedPassword, role_id });
+  
+      res.status(201).json(user);
+    } catch (error) {
+      console.error('Error al registrar el usuario:', error); // Imprimir el error en la consola
+      res.status(500).json({ error: 'Error al registrar el usuario' });
     }
+  });
+  
+
+// Ruta para iniciar sesión
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Busca el usuario por email
+    const user = await User.findOne({ where: { email }, include: Role });
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    // Verifica la contraseña
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    // Genera el token JWT
+    const token = jwt.sign({ id: user.id, role: user.Role.name }, process.env.JWT_SECRET, {
+      expiresIn: '1h', // El token expira en 1 hora
+    });
+
+    res.json({ token });
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar el usuario' });
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 });
 
-// Eliminar un usuario
-router.delete('/:id', async (req, res) => {
+// Ruta para obtener la información del usuario autenticado
+router.get('/me', authMiddleware, async (req, res) => {
   try {
-    const deleted = await User.destroy({ where: { id: req.params.id } });
-    if (deleted) {
-      res.json({ message: 'Usuario eliminado exitosamente' });
-    } else {
-      res.status(404).json({ error: 'Usuario no encontrado' });
-    }
+    const user = await User.findByPk(req.user.id, {
+      include: Role,
+      attributes: { exclude: ['password'] },
+    });
+    res.json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el usuario' });
+    res.status(500).json({ error: 'Error al obtener los datos del usuario' });
   }
 });
 

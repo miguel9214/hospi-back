@@ -1,9 +1,10 @@
+require('dotenv').config(); // Carga las variables de entorno desde .env
 const express = require('express');
 const app = express();
-const { sequelize } = require('./models');
+const { sequelize } = require('./models'); // Asegúrate de que la ruta sea correcta
 
 const equipmentRoutes = require('./routes/equipmentRoutes');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/authRoutes');
 
 app.use(express.json());
 
