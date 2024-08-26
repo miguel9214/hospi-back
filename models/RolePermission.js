@@ -1,23 +1,11 @@
-const { DataTypes } = require('sequelize');
+// models/rolePermission.js
+const Role = require('./role');
+const Permission = require('./permission');
 const sequelize = require('../config/database');
-const Role = require('./Role');
-const Permission = require('./Permission');
+const { DataTypes } = require('sequelize');
 
 const RolePermission = sequelize.define('RolePermission', {
-  role_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Role,
-      key: 'id',
-    },
-  },
-  permission_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Permission,
-      key: 'id',
-    },
-  },
+  // Definir los atributos de la tabla intermedia si es necesario
 });
 
 Role.belongsToMany(Permission, { through: RolePermission });
