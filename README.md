@@ -22,28 +22,32 @@ Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu
 
 ## Instala las Dependencias
 
-Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:
+2. **Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:**
 
+  ```bash
   npm install
 
 Esto instalará todas las dependencias necesarias para el proyecto.
 
 ## Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
 
+   ```bash
   DB_HOST=localhost
   DB_USER=usuario
   DB_PASSWORD=contraseña
   DB_NAME=nombre_base_de_datos
-  Ejecuta la Semilla de la Base de Datos
+
+Ejecuta la Semilla de la Base de Datos
 
 ## Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
 
+  ```bash
   node seed.js
 
 ## Inicia el Servidor
 
-  Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:
+ 4. **Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:**
 
+  ```bash
   npm run dev
-
   node index.js
