@@ -1,68 +1,80 @@
 const express = require('express');
 const { User, Role } = require('../models');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { authMiddleware } = require('../middleware/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-// Ruta para registrar un nuevo usuario
-router.post('/register', async (req, res) => {
-    try {
-      const { username, email, password, role_id } = req.body;
-  
-      // Hashear la contraseña
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Crear el usuario
-      const user = await User.create({ username, email, password: hashedPassword, role_id });
-  
-      res.status(201).json(user);
-    } catch (error) {
-      console.error('Error al registrar el usuario:', error); // Imprimir el error en la consola
-      res.status(500).json({ error: 'Error al registrar el usuario' });
-    }
-  });
-  
+// Middleware de autenticación (se asegura de que el usuario esté autenticado)
+router.use(authMiddleware);
 
-// Ruta para iniciar sesión
-router.post('/login', async (req, res) => {
+// Ruta para obtener todos los usuarios
+router.get('/users', async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Busca el usuario por email
-    const user = await User.findOne({ where: { email }, include: Role });
-    if (!user) {
-      return res.status(401).json({ error: 'Credenciales incorrectas' });
-    }
-
-    // Verifica la contraseña
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Credenciales incorrectas' });
-    }
-
-    // Genera el token JWT
-    const token = jwt.sign({ id: user.id, role: user.Role.name }, process.env.JWT_SECRET, {
-      expiresIn: '1h', // El token expira en 1 hora
+    const users = await User.findAll({
+      include: {
+        model: Role,
+        attributes: ['name']
+      }
     });
-
-    res.json({ token });
+    res.json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Error al iniciar sesión' });
+    res.status(500).json({ error: 'Error al obtener los usuarios' });
   }
 });
 
-// Ruta para obtener la información del usuario autenticado
-router.get('/me', authMiddleware, async (req, res) => {
+// Ruta para obtener un usuario por ID
+router.get('/users/:id', async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id, {
-      include: Role,
-      attributes: { exclude: ['password'] },
+    const user = await User.findByPk(req.params.id, {
+      include: {
+        model: Role,
+        attributes: ['name']
+      }
     });
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los datos del usuario' });
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+});
+
+// Ruta para actualizar un usuario por ID
+router.put('/users/:id', async (req, res) => {
+  try {
+    const { username, email, role_id } = req.body;
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Actualizar la información del usuario
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.role_id = role_id || user.role_id;
+
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
+});
+
+// Ruta para eliminar un usuario por ID
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    await user.destroy();
+    res.json({ message: 'Usuario eliminado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el usuario' });
   }
 });
 

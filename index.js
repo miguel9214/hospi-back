@@ -4,12 +4,14 @@ const app = express();
 const { sequelize } = require('./models'); // Asegúrate de que la ruta sea correcta
 
 const equipmentRoutes = require('./routes/equipmentRoutes');
-const userRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes'); // Rutas para autenticación
+const userRoutes = require('./routes/userRoutes'); // Rutas CRUD para usuarios
 
 app.use(express.json());
 
 app.use('/api/equipments', equipmentRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes); // Prefijo para rutas de autenticación
+app.use('/api/users', userRoutes); // Prefijo para rutas CRUD de usuarios
 
 const PORT = process.env.PORT || 3000;
 
