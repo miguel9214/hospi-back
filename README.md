@@ -24,8 +24,6 @@ Instala las Dependencias
 
 Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:
 
-bash
-Copiar código
 npm install
 Esto instalará todas las dependencias necesarias para el proyecto.
 
@@ -33,8 +31,6 @@ Configura la Base de Datos
 
 Crea un archivo de configuración para la base de datos. Crea un archivo llamado config/database.js y configura la conexión a tu base de datos:
 
-javascript
-Copiar código
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('nombre_base_de_datos', 'usuario', 'contraseña', {
@@ -47,8 +43,6 @@ Configura las Variables de Entorno
 
 Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
 
-makefile
-Copiar código
 DB_HOST=localhost
 DB_USER=usuario
 DB_PASSWORD=contraseña
@@ -57,18 +51,13 @@ Ejecuta la Semilla de la Base de Datos
 
 Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
 
-bash
-Copiar código
+
 node seed.js
+
 Inicia el Servidor
 
 Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:
 
-bash
-Copiar código
 npm run dev
-O con node:
 
-bash
-Copiar código
 node index.js
