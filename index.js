@@ -22,3 +22,10 @@ app.listen(PORT, async () => {
     console.error('Unable to connect to the database:', error);
   }
 });
+
+
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'http://localhost:3001' // O permite todas las solicitudes con origin: '*'
+}));
