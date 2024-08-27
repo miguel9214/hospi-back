@@ -20,44 +20,30 @@ Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu
    git clone https://github.com/tu_usuario/tu_repositorio.git
    cd tu_repositorio
 
-Instala las Dependencias
+## Instala las Dependencias
 
 Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:
 
-npm install
+  npm install
+
 Esto instalará todas las dependencias necesarias para el proyecto.
 
-Configura la Base de Datos
+## Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
 
-Crea un archivo de configuración para la base de datos. Crea un archivo llamado config/database.js y configura la conexión a tu base de datos:
+  DB_HOST=localhost
+  DB_USER=usuario
+  DB_PASSWORD=contraseña
+  DB_NAME=nombre_base_de_datos
+  Ejecuta la Semilla de la Base de Datos
 
-const { Sequelize } = require('sequelize');
+## Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
 
-const sequelize = new Sequelize('nombre_base_de_datos', 'usuario', 'contraseña', {
-  host: 'localhost',
-  dialect: 'mysql', // Cambia a 'postgres' si usas PostgreSQL
-});
+  node seed.js
 
-module.exports = sequelize;
-Configura las Variables de Entorno
+## Inicia el Servidor
 
-Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
+  Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:
 
-DB_HOST=localhost
-DB_USER=usuario
-DB_PASSWORD=contraseña
-DB_NAME=nombre_base_de_datos
-Ejecuta la Semilla de la Base de Datos
+  npm run dev
 
-Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
-
-
-node seed.js
-
-Inicia el Servidor
-
-Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:
-
-npm run dev
-
-node index.js
+  node index.js
