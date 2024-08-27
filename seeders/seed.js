@@ -1,11 +1,7 @@
 // seed.js
 
 const sequelize = require('../config/database');
-const Role = require('../models/index.js');
-const User = require('../models/index.js');
-const Permission = require('../models/index.js');
-const Equipment = require('../models/index,js'); 
-const RolePermission = require('../models/index.js');
+const { Role, User, Permission, Equipment, RolePermission } = require('../models'); // Importa todos los modelos desde index.js
 const bcrypt = require('bcryptjs');
 
 // Función principal para ejecutar las semillas

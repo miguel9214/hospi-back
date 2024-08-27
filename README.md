@@ -20,55 +20,34 @@ Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu
    git clone https://github.com/tu_usuario/tu_repositorio.git
    cd tu_repositorio
 
-Instala las Dependencias
+## Instala las Dependencias
 
-Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:
+2. **Asegúrate de estar en el directorio raíz del proyecto y luego ejecuta:**
 
-bash
-Copiar código
-npm install
+  ```bash
+  npm install
+
 Esto instalará todas las dependencias necesarias para el proyecto.
 
-Configura la Base de Datos
+## Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
 
-Crea un archivo de configuración para la base de datos. Crea un archivo llamado config/database.js y configura la conexión a tu base de datos:
+   ```bash
+  DB_HOST=localhost
+  DB_USER=usuario
+  DB_PASSWORD=contraseña
+  DB_NAME=nombre_base_de_datos
 
-javascript
-Copiar código
-const { Sequelize } = require('sequelize');
-
-const sequelize = new Sequelize('nombre_base_de_datos', 'usuario', 'contraseña', {
-  host: 'localhost',
-  dialect: 'mysql', // Cambia a 'postgres' si usas PostgreSQL
-});
-
-module.exports = sequelize;
-Configura las Variables de Entorno
-
-Crea un archivo .env en la raíz del proyecto para almacenar las variables de entorno. Añade las siguientes variables:
-
-makefile
-Copiar código
-DB_HOST=localhost
-DB_USER=usuario
-DB_PASSWORD=contraseña
-DB_NAME=nombre_base_de_datos
 Ejecuta la Semilla de la Base de Datos
 
-Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
+## Para poblar la base de datos con datos iniciales, ejecuta el script de semillas:
 
-bash
-Copiar código
-node seed.js
-Inicia el Servidor
+  ```bash
+  node seed.js
 
-Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:
+## Inicia el Servidor
 
-bash
-Copiar código
-npm run dev
-O con node:
+ 4. **Puedes iniciar el servidor de desarrollo con nodemon para recargar automáticamente los cambios:**
 
-bash
-Copiar código
-node index.js
+  ```bash
+  npm run dev
+  node index.js

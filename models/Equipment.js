@@ -1,24 +1,81 @@
-module.exports = (sequelize, DataTypes) => {
-  const Equipment = sequelize.define('Equipment', {
-    dependencia: DataTypes.STRING,
-    nombre_de_equipo: DataTypes.STRING,
-    so: DataTypes.STRING,
-    paquete_ofimatica: DataTypes.STRING,
-    modelo: DataTypes.STRING,
-    marca: DataTypes.STRING,
-    cpu: DataTypes.STRING,
-    hdd: DataTypes.INTEGER,
-    ram: DataTypes.INTEGER,
-    ip: DataTypes.STRING,
-    mac: DataTypes.STRING,
-    serial: DataTypes.STRING,
-    numero_activo_fijo: DataTypes.STRING,
-    anydesk: DataTypes.STRING,
-    impresora: DataTypes.STRING,
-    numero_activo_fijo_impresora: DataTypes.STRING,
-    escaner: DataTypes.STRING,
-    numero_activo_fijo_escaner: DataTypes.STRING,
-  });
+// models/Equipment.js
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-  return Equipment;
-};
+const Equipment = sequelize.define('Equipment', {
+  // Define los campos de tu tabla Equipment aquí
+  dependencia: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  nombre_equipo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  so: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  paquete_ofimatica: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  modelo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  marca: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  cpu: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  hdd: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  ram: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  ip: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  mac: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  serial: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  n_activo_fijo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  anydesk: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  impresora: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  impresora_n_activo_fijo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  escaner: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  escaner_n_activo_fijo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+});
+
+module.exports = Equipment;
