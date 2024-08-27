@@ -13,7 +13,7 @@ app.use('/api/equipments', equipmentRoutes);
 app.use('/api/auth', authRoutes); // Prefijo para rutas de autenticación
 app.use('/api/users', userRoutes); // Prefijo para rutas CRUD de usuarios
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3040;
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
@@ -26,8 +26,8 @@ app.listen(PORT, async () => {
 });
 
 
-const cors = require('cors');
+// const cors = require('cors');
 
-app.use(cors({
-    origin: 'http://localhost:3001' // O permite todas las solicitudes con origin: '*'
-}));
+// // app.use(cors({
+// //     origin: 'http://localhost:3001' // O permite todas las solicitudes con origin: '*'
+// // }));
