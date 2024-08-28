@@ -14,6 +14,11 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password, role_id } = req.body;
 
+    // Verificar si algún campo requerido está vacío
+    if (!username || !email || !password || !role_id) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
     // Verificar si el email ya está registrado
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
