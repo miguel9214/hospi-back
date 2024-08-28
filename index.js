@@ -1,33 +1,31 @@
-require('dotenv').config(); // Carga las variables de entorno desde .env
 const express = require('express');
+const cors = require('cors');  // Importa CORS
 const app = express();
-const { sequelize } = require('./models'); // Asegúrate de que la ruta sea correcta
+const { sequelize } = require('./models');
+
+// Configura CORS para permitir solicitudes desde el frontend
+app.use(cors({
+    origin: 'http://localhost:3000'  // Reemplaza con el origen de tu frontend
+}));
 
 const equipmentRoutes = require('./routes/equipmentRoutes');
-const authRoutes = require('./routes/authRoutes'); // Rutas para autenticación
-const userRoutes = require('./routes/userRoutes'); // Rutas CRUD para usuarios
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
 
 app.use('/api/equipments', equipmentRoutes);
-app.use('/api/auth', authRoutes); // Prefijo para rutas de autenticación
-app.use('/api/users', userRoutes); // Prefijo para rutas CRUD de usuarios
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 3040;
 
 app.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}`);
-  try {
-    await sequelize.authenticate();
-    console.log('Connection to the database has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+    console.log(`Server is running on port ${PORT}`);
+    try {
+        await sequelize.authenticate();
+        console.log('Connection to the database has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
 });
-
-
-// const cors = require('cors');
-
-// // app.use(cors({
-// //     origin: 'http://localhost:3001' // O permite todas las solicitudes con origin: '*'
-// // }));
